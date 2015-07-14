@@ -39,11 +39,11 @@ def hot():
 @bp.route('/new', defaults={'page': 1})
 @bp.route('/new/page/<int:page>')
 def new(page):
+    new_stories__son_stories = []
     new_stories = Story.query.order_by(Story.created.desc())
     new_stories = new_stories.paginate(
         page, current_app.config['FLASK_STORIES_PER_PAGE'], error_out=True)
 
-    new_stories__son_stories = []
     for hot_story in new_stories.items:
         son_stories = Story.query.filter_by(
             parent_story_id=hot_story.id).order_by(Story.created.desc()).all()

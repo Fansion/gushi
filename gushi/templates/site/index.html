@@ -17,8 +17,13 @@
             <a class="new {% if new %}on{% endif %}" href="{{ url_for('site.new') }}">最新发布</a>
         </div>
         <div class="stories">
-            {{ generate_stories(hot_stories__son_stories) }}
-            {{ generate_stories(new_stories__son_stories, stories) }}
+            {% if hot_stories__son_stories %}
+                {{ generate_stories(hot_stories__son_stories) }}
+            {% elif new_stories__son_stories %}
+                {{ generate_stories(new_stories__son_stories, stories) }}
+            {% else %}
+                暂无
+            {% endif %}
         </div>
     </div>
 {% endblock %}

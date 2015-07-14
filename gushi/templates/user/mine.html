@@ -17,8 +17,13 @@
             <a class="my {% if my %}on{% endif %}" href="{{ url_for('user.my_stories') }}">我写的故事</a>
         </div>
         <div class="stories">
-            {{ generate_stories(my_upvote_stories__son_stories, stories, 1) }}
-            {{ generate_stories(my_stories__son_stories, stories, 1) }}
+            {% if my_upvote_stories__son_stories %}
+                {{ generate_stories(my_upvote_stories__son_stories, stories, 1) }}
+            {% elif my_stories__son_stories %}
+                {{ generate_stories(my_stories__son_stories, stories, 1) }}
+            {% else %}
+                暂无
+            {% endif %}
         </div>
     </div>
 {% endblock %}

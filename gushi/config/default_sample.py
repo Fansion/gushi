@@ -14,7 +14,7 @@ class Config:
     FLASKY_PASSWORD = 'default'
 
     # number
-    FLASK_COMMENTS_PER_PAGE = 5
+    FLASK_STORIES_PER_PAGE = 5
 
     # app config
     PERMANENT_SESSION_LIFETIME = 3600 * 24 * 7
