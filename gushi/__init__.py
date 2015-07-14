@@ -53,13 +53,13 @@ def register_jinja(app):
 
 
 def register_routes(app):
-    from .controllers import admin, site, user, auth
-    from .api_1_0 import api
+    from .controllers import site, user, auth
+    # from .api_1_0 import api
     app.register_blueprint(site.bp, url_prefix='')
-    app.register_blueprint(admin.bp, url_prefix='/admin')
+    # app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp, url_prefix='/user')
     app.register_blueprint(auth.bp, url_prefix='/auth')
-    app.register_blueprint(api, url_prefix='/api/v1.0')
+    # app.register_blueprint(api, url_prefix='/api/v1.0')
 
 
 def register_error_handle(app):

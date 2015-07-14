@@ -42,25 +42,3 @@ class Config:
     SMTP_PASSWORD = ""
     SMTP_FROM = ""
     SMTP_ADMIN = ""
-
-    # Redis
-    REDIS = False  # 是否启用Redis
-    REDIS_HOST = "localhost"
-    REDIS_PORT = 6379
-    REDIS_DB = 1
-
-    # for crawller
-    # 从外部sharefun目录下调用script时，需要用到对应的绝对路径
-    CURRENT_DIR = os.path.abspath(os.path.pardir)
-    # 写死的路径
-    # -------------------------------------
-    SPIDER_BASE_DIR = 'sharefun/script/spider'
-    COVERS_BASE_PATH = 'sharefun/static/covers'
-    # -------------------------------------
-    NAMES_PATH = os.path.join(CURRENT_DIR, SPIDER_BASE_DIR, 'names')
-    SUCCESSFUL_NAMES_PATH = os.path.join(
-        CURRENT_DIR, SPIDER_BASE_DIR, 'successful_names')
-    FAILED_NAMES_PATH = os.path.join(
-        CURRENT_DIR, SPIDER_BASE_DIR, 'failed_names')
-    WEBPAGES_PATH = os.path.join(CURRENT_DIR, SPIDER_BASE_DIR, 'webpages')
-    COVERS_FOLDER_PATH = os.path.join(CURRENT_DIR, COVERS_BASE_PATH)
