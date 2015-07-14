@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import generate_stories with context %}
+
+{% block page_title %}故事-我的页{% endblock %}
+{% block page_id %}page-mine{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="category">
+            <a class="my_upvote {% if my_upvote %}on{% endif %}" href="{{ url_for('user.my_upvote_stories') }}">我喜欢的故事</a>
+            <a class="my {% if my %}on{% endif %}" href="{{ url_for('user.my_stories') }}">我写的故事</a>
+        </div>
+        <div class="stories">
+            {{ generate_stories(my_upvote_stories__son_stories, stories, 1) }}
+            {{ generate_stories(my_stories__son_stories, stories, 1) }}
+        </div>
+    </div>
+{% endblock %}
+

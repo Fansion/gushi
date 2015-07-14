@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import generate_stories with context %}
+
+{% block page_title %}故事-首页{% endblock %}
+{% block page_id %}page-index{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="category">
+            <a class="hot {% if hot %}on{% endif %}" href="{{ url_for('site.hot') }}">热门故事</a>
+            <a class="new {% if new %}on{% endif %}" href="{{ url_for('site.new') }}">最新发布</a>
+        </div>
+        <div class="stories">
+            {{ generate_stories(hot_stories__son_stories) }}
+            {{ generate_stories(new_stories__son_stories, stories) }}
+        </div>
+    </div>
+{% endblock %}
+

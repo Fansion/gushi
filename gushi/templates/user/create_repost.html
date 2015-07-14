@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import generate_stories, field_errors, horizontal_field with context %}
+
+{% block page_title %}故事-续写故事页
+{% endblock %}
+{% block page_id %}page-repost-story{% endblock %}
+
+{% block body %}
+<div class="row">
+    {# stories__son_stories至少有一条记录 #}
+    <legend><<{{ stories__son_stories[-1][0].title }}>>的故事线</legend>
+    <div class="stories">
+        {{ generate_stories(stories__son_stories, None, 1) }}
+    </div>
+</div>
+<div class="row">
+    <legend>续写故事</legend>
+    <form id="form-repost-story" class="form-horizontal" method="POST" action="{{ url_for('user.create_repost', story_id=stories__son_stories[-1][0].id) }}">
+        <fieldset>
+                {{ form.csrf_token }}
+                {{ horizontal_field(form.content, rows="15") }}
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-2">
+                        {% for message in get_flashed_messages() %}
+                            <div class="alert alert-warning">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+
+                        <input type="submit" value="提交" class="btn btn-sm btn-primary" />
+                    </div>
+                </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

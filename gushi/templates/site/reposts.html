@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import generate_stories with context %}
+
+{% block page_title %}故事-故事线页
+{% endblock %}
+{% block page_id %}page-repost-story{% endblock %}
+
+{% block body %}
+<div class="row">
+    {# stories__son_stories至少有一条记录 #}
+    <legend><<{{ stories__son_stories[-1][0].title }}>>的故事线</legend>
+    <div class="stories">
+        {{ generate_stories(stories__son_stories) }}
+    </div>
+</div>
+{% endblock %}

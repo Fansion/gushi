@@ -1,0 +1,37 @@
+.idea/
+venv/
+*.pyc
+others/*
+
+# config
+gushi/config/default.py
+gushi/config/development.py
+gushi/config/production.py
+gushi/config/testing.py
+
+# pics
+
+# fabric
+fabfile.py
+
+# sql
+initialization.sql
+
+# mysql
+migrations/*
+
+# test
+gushi/test.py
+
+# about page
+gushi/templates/site/about.html
+
+# not used
+gushi/controllers/admin.py
+gushi/templates/auth/email.html
+gushi/templates/site/story.html
+gushi/templates/user/user.html
+
+# api
+gushi/api_1_0/*
+gushi/apis.py

@@ -1,0 +1,131 @@
+{% macro pagination(paginator) %}
+   {% if paginator.pages > 1 %}
+      <ul class='pagination pagination-sm'>
+         {% if paginator.has_prev %}
+            <li><a href="{{ url_for_other_page(paginator.prev_num) }}">上一页</a></li>
+         {% endif %}
+
+         {% for page in paginator.iter_pages() %}
+            {% if page %}
+               {% if page != paginator.page %}
+                  <li><a href="{{ url_for_other_page(page) }}">{{ page }}</a></li>
+               {% else %}
+                  <li class="active"><span>{{ page }}</span></li>
+               {% endif %}
+            {% else %}
+               <li class="ellipsis"><span>...</span></li>
+            {% endif %}
+         {% endfor %}
+
+         {% if paginator.has_next %}
+            <li><a href="{{ url_for_other_page(paginator.next_num) }}">下一页</a></li>
+         {% endif %}
+      </ul>
+   {% endif %}
+{% endmacro %}
+
+{% macro field_errors(field) %}
+    {% if field.errors %}
+        <ul class="list-form-errors text-danger list-unstyled">
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro horizontal_field(field, length=6, label=True, rows="1") %}
+    <div class="form-group">
+        {% if label %}
+            {{ field.label(class="col-md-2 control-label") }}
+        {% endif %}
+
+        <div class="col-md-{{ length }}">
+            {{ field(class="form-control", placeholder=field.description, rows=rows, **kwargs) }}
+            {{ field_errors(field) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro two_horizontal_field(field1, field2, length1=3, length2=5, label=True) %}
+    <div class="form-group">
+        {% if label %}
+            {{ field1.label(class="col-md-2 control-label") }}
+        {% endif %}
+        <div class="col-md-{{ length1 }}">
+            {{ field1(class="form-control", placeholder=field1.description, **kwargs) }}
+            {{ field_errors(field1) }}
+        </div>
+
+        {% if label %}
+            {{ field2.label(class="col-md-1 control-label") }}
+        {% endif %}
+        <div class="col-md-{{ length2 }}">
+            {{ field2(class="form-control", placeholder=field2.description, **kwargs) }}
+            {{ field_errors(field2) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro generate_stories(stories__son_stories, stories=None, logined_in=False) %}
+   {% if stories__son_stories %}
+        {% for story, son_stories in stories__son_stories %}
+            <div class='row'>
+                <div class="col-md-2 control-label">
+                    <div align="right">
+                        {# <img class="img-rounded profile-thumnnail" src="{{ story.user.gravatar(60) }}"> #}
+                        <a href="{{ url_for('site.user_stories', user_id=story.user.id) }}"><img class="img-rounded profile-thumnnail" src="{{ story.user.gravatar(60) }}"></a>
+                    </div>
+                    <div class="user" align="right">{{ story.user.username | ismyself }}</div>
+                </div>
+                <div class='col-md-8'>
+                    <div class="body">
+                        <div class="header">
+                            <li class="time">{{ moment(story.created).fromNow(refresh=True) }}</li>
+                        </div>
+                        <div class="content">
+                            <p>{{ story.content | markdown | safe }}</p>
+                        </div>
+                        <div class="footer">
+                            <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs">我要续写</a>
+                            <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs">已续写</button>
+                            <script type="text/javascript">
+                                $('#btn-convert-{{ story.id }}').click(function () {
+                                    if($("#btn-convert-{{ story.id }}").text() == "已续写") {
+                                        $("#son_stories_writers-{{ story.id }}").css("display", "block");
+                                        $("#btn-convert-{{ story.id }}").text("折叠");
+                                        return;
+                                    }
+                                    if($("#btn-convert-{{ story.id }}").text() == "折叠") {
+                                        $("#son_stories_writers-{{ story.id }}").css("display", "none");
+                                        $("#btn-convert-{{ story.id }}").text("已续写");
+                                        return;
+                                    }
+                                });
+                            </script>
+                            <a href="{{ url_for('user.upvote', story_id=story.id) }}"  class="btn btn-default btn-xs btn-danger">点赞</a>&nbsp;{{ story.upvotes.count() }}
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2 son_stories_writers' id="son_stories_writers-{{ story.id }}">
+                    {% if son_stories %}
+                        {% for son_story in son_stories %}
+                            {# 登陆用户在mine.html和create_repost.html中可看到名字 #}
+                            {% if logined_in %}
+                                <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs">{{ son_story.user.username }}</a>
+                                {# <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}">{{ son_story.user.username }}</a> #}
+                            {# 非登陆用户只能看到续写者的图标 #}
+                            {% else %}
+                                {# <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs">{{ son_story.user.username }}</a> #}
+                                <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}"></a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        {% if stories %}
+            {{ pagination(stories) }}
+        {% endif %}
+    {% endif %}
+{% endmacro %}

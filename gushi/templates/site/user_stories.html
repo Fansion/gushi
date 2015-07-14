@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import generate_stories with context %}
+
+{% block page_title %}故事-用户所有故事页{% endblock %}
+{% block page_id %}page-user-stories{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <legend>{{ user.username }}写的所有故事</legend>
+        <div class="stories">
+            {{ generate_stories(stories__son_stories) }}
+        </div>
+    </div>
+{% endblock %}
+

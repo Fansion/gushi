@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import field_errors, horizontal_field, two_horizontal_field %}
+
+{% block page_title %}故事-创建新故事页
+{% endblock %}
+{% block page_id %}page-create-story
+{% endblock %}
+
+{% block body %}
+
+<legend>创建新故事</legend>
+<form id="form-create-story" class="form-horizontal" method="POST" action="{{ url_for('user.create_story') }}">
+    <fieldset>
+        {{ form.csrf_token }}
+        {{ horizontal_field(form.title) }}
+        {{ horizontal_field(form.content, rows="15") }}
+
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-2">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <input type="submit" value="提交" class="btn btn-sm btn-primary" />
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+{% endblock %}
