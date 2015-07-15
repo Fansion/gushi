@@ -110,7 +110,7 @@ def douban_signin():
         url = "https://api.douban.com/v2/user/%d" % user_id
         user_info = requests.get(url).json()
         # get user info from douban, store id as email for gravatar
-        user = User(email=user_info['douban_user_id'], douban_id=user_id,
+        user = User(email=user_info['id'], douban_id=user_id,
                     username=user_info['name'])
     flash('欢迎使用豆瓣账户登陆GuShi')
     login_user(user)
