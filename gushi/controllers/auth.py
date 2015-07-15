@@ -87,6 +87,7 @@ def douban_signin():
     """
     # get current authed user id
     code = request.args.get('code')
+    # print code
     if not code:
         return redirect(url_for('site.index'))
     url = "https://www.douban.com/service/auth2/token"
@@ -99,21 +100,22 @@ def douban_signin():
         'code': code
     }
     res = requests.post(url, data=data).json()
+    # print res
     if 'douban_user_id' not in res:
         return redirect(url_for('site.index'))
 
     user_id = int(res['douban_user_id'])
     user = User.query.filter_by(douban_id=user_id).first()
     if user:
-        user.access_token = res['access_token']
+        user.douban_access_token = res['access_token']
     else:
         url = "https://api.douban.com/v2/user/%d" % user_id
         user_info = requests.get(url).json()
         # get user info from douban, store id as email for gravatar
         user = User(email=user_info['id'], douban_id=user_id,
-                    username=user_info['name'])
-    flash('欢迎使用豆瓣账户登陆GuShi')
-    login_user(user)
+                    username=user_info['name'], douban_access_token=res['access_token'])
     db.session.add(user)
     db.session.commit()
+    login_user(user)
+    flash('欢迎使用豆瓣账户登陆GuShi')
     return redirect(url_for('site.index'))
