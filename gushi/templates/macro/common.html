@@ -81,14 +81,16 @@
                 <div class='col-md-8'>
                     <div class="body">
                         <div class="header">
+                            <li class="time"><<{{ story.title }}>></li>
+                            <li class="time">&nbsp;&nbsp;</li>
                             <li class="time">{{ moment(story.created).fromNow(refresh=True) }}</li>
                         </div>
                         <div class="content">
                             <p>{{ story.content | markdown | safe }}</p>
                         </div>
                         <div class="footer">
-                            <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs">我要续写</a>
-                            <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs">已续写</button>
+                            <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs btn-info">我要续写</a>
+                            <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs btn-primary">已续写</button>
                             <script type="text/javascript">
                                 $('#btn-convert-{{ story.id }}').click(function () {
                                     if($("#btn-convert-{{ story.id }}").text() == "已续写") {
