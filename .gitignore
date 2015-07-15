@@ -38,3 +38,4 @@ gushi/api_1_0/*
 gushi/apis.py
 
 try_it.py
+gushi/sinaweibo_api.py

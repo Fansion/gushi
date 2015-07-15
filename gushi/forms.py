@@ -50,3 +50,10 @@ class RepostStoryForm(Form):
 
     content = TextAreaField(
         '内容', description='鼠标移到右下角点击移动拖大此框,支持markdown', validators=[DataRequired('内容不能为空')])
+
+
+class SingleStoryForm(Form):
+
+    title = TextField('故事标题')
+    content = TextField('故事内容')
+    user_id = SelectField('创建人',  coerce=int)

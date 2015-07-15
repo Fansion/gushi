@@ -45,9 +45,13 @@ def signin():
             flash('该邮箱尚未注册，请重新登陆')
             return render_template('auth/signin.html', form=form)
         if user is not None and user.verify_password(form.password.data):
-            flash('欢迎登陆GuShi')
             login_user(user, form.remember_me.data)
-            return redirect(request.args.get('next') or url_for('site.index'))
+            if user.role.name == 'Administrator':
+                flash('欢迎审核信息')
+                return redirect(url_for('admin.audit'))
+            else:
+                flash('欢迎登陆GuShi')
+                return redirect(request.args.get('next') or url_for('site.index'))
         flash('邮箱或密码错误，请重新登陆')
     return render_template('auth/signin.html', form=form)
 

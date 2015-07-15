@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block page_title %}故事-审核页
+{% endblock %}
+{% block page_id %}page-audit{% endblock %}
+
+{% block body %}
+    {% if stories.count() %}
+        <table class="table table-bordered">
+            <tr>
+                <td>标题</td>
+                <td>内容</td>
+                <td>创建人</td>
+                <td>创建时间</td>
+                <td></td>
+            </tr>
+            {% for story in stories %}
+                <tr>
+                    <td>{{ story.title }}</td>
+                    <td>{{ story.content | markdown | safe }}</td>
+                    <td>{{ story.user.username }}</td>
+                    <td>{{ moment(story.created).fromNow(refresh=True) }}</td>
+                    <td>
+                         <form method="get" action="{{ url_for('admin.edit', story_id=story.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <input class="btn btn-default" type="submit" name="edit" value="修改">
+                         </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h5 class="table">暂无</h5>
+    {% endif %}
+{% endblock %}

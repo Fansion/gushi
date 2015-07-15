@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import field_errors, horizontal_field, %}
+
+{% block page_title %}故事-编辑页
+{% endblock %}
+{% block page_id %}page-edit{% endblock %}
+
+{% block body %}
+    <legend>修改故事页面</legend>
+    <form id="form-edit-story" class="form-horizontal" method="POST" action="{{ url_for('admin.edit', story_id=story.id) }}">
+        <fieldset>
+            {{ form.csrf_token }}
+
+            {{ horizontal_field(form.user_id) }}
+            {{ horizontal_field(form.title) }}
+            {{ horizontal_field(form.content, rows="15") }}
+
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-2">
+                    <input type="submit" value="提交" class="btn btn-sm btn-primary" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
