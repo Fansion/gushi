@@ -8,7 +8,7 @@
 {% block body %}
 <div class="row">
     {# stories__son_stories至少有一条记录 #}
-    <legend>{{ <<stories__son_stories[-1][0].title>> }}的故事线</legend>
+    <legend>《{{ stories__son_stories[-1][0].title }}》的故事线</legend>
     <div class="stories">
         {{ generate_stories(stories__son_stories) }}
     </div>
