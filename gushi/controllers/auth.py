@@ -6,6 +6,11 @@ from flask.ext.login import login_user, logout_user, login_required
 from ..forms import SigninForm, RegisterForm
 from ..models import db, User
 from ..decorators import logout_required
+from ..utils import signin_user
+from ..qq_api import APIClient
+
+
+import requests
 
 
 bp = Blueprint('auth', __name__)
@@ -52,4 +57,63 @@ def signin():
 def signout():
     logout_user()
     flash('成功登出GuShi,欢迎再次访问本站')
+    return redirect(url_for('site.index'))
+
+
+@bp.route('qq_pre_signin')
+@logout_required
+def qq_pre_signin():
+    pass
+
+
+@bp.route('qq_signin')
+@logout_required
+def qq_signin():
+    pass
+
+
+@bp.route('/douban_pre_signin')
+@logout_required
+def douban_pre_signin():
+    config = current_app.config
+    return redirect(config.get('DOUBAN_LOGIN_URL'))
+
+
+@bp.route('/douban_signin')
+@logout_required
+def douban_signin():
+    """通过豆瓣OAuth登陆
+    user_id实际是User表中的douban_id字段
+    """
+    # get current authed user id
+    code = request.args.get('code')
+    if not code:
+        return redirect(url_for('site.index'))
+    url = "https://www.douban.com/service/auth2/token"
+    config = current_app.config
+    data = {
+        'client_id': config.get('DOUBAN_CLIENT_ID'),
+        'client_secret': config.get('DOUBAN_SECRET'),
+        'redirect_uri': config.get('DOUBAN_REDIRECT_URI'),
+        'grant_type': 'authorization_code',
+        'code': code
+    }
+    res = requests.post(url, data=data).json()
+    if 'douban_user_id' not in res:
+        return redirect(url_for('site.index'))
+
+    user_id = int(res['douban_user_id'])
+    user = User.query.filter_by(douban_id=user_id).first()
+    if user:
+        user.access_token = res['access_token']
+    else:
+        url = "https://api.douban.com/v2/user/%d" % user_id
+        user_info = requests.get(url).json()
+        # get user info from douban, store id as email for gravatar
+        user = User(email=user_info['douban_user_id'], douban_id=user_id,
+                    username=user_info['name'])
+    flash('欢迎使用豆瓣账户登陆GuShi')
+    login_user(user)
+    db.session.add(user)
+    db.session.commit()
     return redirect(url_for('site.index'))

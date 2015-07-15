@@ -53,6 +53,11 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     avatar_hash = db.Column(db.String(32))
+    # 豆瓣用户只存douban_id和douban_access_token还有name作为username
+    # 潜在的bug是豆瓣用户名name可能与数据表里的username相同造成冲突
+    douban_id = db.Column(db.Integer)               # douban id
+    douban_access_token = db.Column(db.String(50))  # 本次成功登陆的access_token
+
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, **kwargs):

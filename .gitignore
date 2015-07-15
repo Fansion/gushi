@@ -36,3 +36,5 @@ gushi/templates/user/user.html
 # api
 gushi/api_1_0/*
 gushi/apis.py
+
+try_it.py
