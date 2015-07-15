@@ -10,7 +10,7 @@
     {# stories__son_stories至少有一条记录 #}
     <legend>《{{ stories__son_stories[-1][0].title }}》的故事线</legend>
     <div class="stories">
-        {{ generate_stories(stories__son_stories, None, 1) }}
+        {{ generate_stories(stories__son_stories, None, True) }}
     </div>
 </div>
 <div class="row">

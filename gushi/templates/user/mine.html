@@ -18,9 +18,9 @@
         </div>
         <div class="stories">
             {% if my_upvote_stories__son_stories %}
-                {{ generate_stories(my_upvote_stories__son_stories, stories, 1) }}
+                {{ generate_stories(my_upvote_stories__son_stories, stories, True) }}
             {% elif my_stories__son_stories %}
-                {{ generate_stories(my_stories__son_stories, stories, 1) }}
+                {{ generate_stories(my_stories__son_stories, stories, True) }}
             {% else %}
                 暂无
             {% endif %}

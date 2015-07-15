@@ -67,7 +67,7 @@
     </div>
 {% endmacro %}
 
-{% macro generate_stories(stories__son_stories, stories=None, logined_in=False) %}
+{% macro generate_stories(stories__son_stories, stories=None, logined_in=False, complete_content=False) %}
    {% if stories__son_stories %}
         {% for story, son_stories in stories__son_stories %}
             <div class='row'>
@@ -81,12 +81,17 @@
                 <div class='col-md-8'>
                     <div class="body">
                         <div class="header">
-                            <li class="time">《{{ story.title }}》</li>
+                            <li class="time">《{{ story.title  | truncate(20, true) | safe }}》</li>
                             <li class="time">&nbsp;&nbsp;</li>
                             <li class="time">{{ moment(story.created).fromNow(refresh=True) }}</li>
                         </div>
                         <div class="content">
-                            <p>{{ story.content | markdown | safe }}</p>
+                            {# 只有请求site.reposts时才显示全文，其余页面截取显示 #}
+                            {% if complete_content %}
+                                <p>{{ story.content | markdown | safe }}</p>
+                            {% else %}
+                                <p class="abstract"><a href="{{ url_for('site.reposts', story_id=story.id) }}">{{ story.content | truncate(35, true) | markdown | safe }}</a></p>
+                            {% endif %}
                         </div>
                         <div class="footer">
                             <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs btn-info">我要续写</a>
@@ -114,12 +119,12 @@
                         {% for son_story in son_stories %}
                             {# 登陆用户在mine.html和create_repost.html中可看到名字 #}
                             {% if logined_in %}
-                                <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs">{{ son_story.user.username }}</a>
-                                {# <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}">{{ son_story.user.username }}</a> #}
+                                {# <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs"　title="{{ son_story.content }}">{{ son_story.user.username }}</a> #}
+                                <a href="{{ url_for('user.create_repost', story_id=son_story.id) }}" class="btn btn-success btn-xs"　title="{{ son_story.content }}"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}"></a>
                             {# 非登陆用户只能看到续写者的图标 #}
                             {% else %}
-                                {# <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs">{{ son_story.user.username }}</a> #}
-                                <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}"></a>
+                                {# <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs" title="{{ son_story.content }}">{{ son_story.user.username }}</a> #}
+                                <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs" title="{{ son_story.content }}"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}"></a>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
