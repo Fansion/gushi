@@ -52,8 +52,8 @@
                         {% if current_user.is_administrator() %}
                           <li><a href="{{ url_for('admin.audit') }}"><i class="fa fa-pencil">审核</i></a></li>
                         {% else %}
-                          <li><a href="{{ url_for('user.create_story') }}">写故事</a></li>
-                          <li><a href="{{ url_for('user.mine') }}">我的</a></li>
+                        <li><a href="{{ url_for('user.create_story') }}"><i class="fa fa-pencil">写故事</i>i></a></li>
+                          <li><a href="{{ url_for('user.mine') }}"><i class="fa fa-home">我的</i></a></li>
                         {% endif %}
                         <li><a href="{{ url_for('auth.signout') }}"><i class="fa fa-sign-out"></i>登出</a></li>
                        </ul>
