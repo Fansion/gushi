@@ -6,12 +6,6 @@
 
 {% block body %}
     <div class="row">
-        {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
         <div class="category">
             <a class="my_upvote {% if my_upvote %}on{% endif %}" href="{{ url_for('user.my_upvote_stories') }}">我喜欢的故事</a>
             <a class="my {% if my %}on{% endif %}" href="{{ url_for('user.my_stories') }}">我写的故事</a>

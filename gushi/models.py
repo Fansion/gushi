@@ -41,7 +41,7 @@ class Role(db.Model):
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
-        return "Role %s" % self.name
+        return "Role(name=%s)" % self.name
 
 
 class User(UserMixin, db.Model):
@@ -124,7 +124,7 @@ class User(UserMixin, db.Model):
             db.session.commit()
 
     def __repr__(self):
-        return "User %s" % self.username
+        return "User(username=%s)" % self.username
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -191,7 +191,7 @@ class Story(db.Model):
                      title=title, content=content, user_id=user_id)
 
     def __repr__(self):
-        return "Story (%s->%s)" % (self.title, self.content)
+        return "Story(title=%s->content=%s)" % (self.title, self.content)
 
 
 class Upvote(db.Model):
@@ -205,7 +205,7 @@ class Upvote(db.Model):
     story_id = db.Column(db.Integer, db.ForeignKey('stories.id'))
 
     def __repr__(self):
-        return "Upvote %s->%s" % (self.user_id, self.story_id)
+        return "Upvote(user_id=%s->story_id=%s)" % (self.user_id, self.story_id)
 
 
 class Follow(db.Model):
@@ -218,4 +218,4 @@ class Follow(db.Model):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
-        return "Follow %s->%s" % (self.fans_id, self.user_id)
+        return "Follow(fans_id=%s->user_id=%s)" % (self.fans_id, self.user_id)
