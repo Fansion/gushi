@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% from "macro/common.html" import field_errors, horizontal_field, %}
+
+{% block page_title %}故事-个人设置页
+{% endblock %}
+{% block page_id %}page-setting{% endblock %}
+
+{% block body %}
+    <legend>修改个人信息页面</legend>
+    <form id="form-edit-user" class="form-horizontal" method="POST" action="{{ url_for('user.setting', user_id=user.id) }}">
+        <fieldset>
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {{ form.csrf_token }}
+
+            {{ horizontal_field(form.email, 6, True, "1", True) }}
+            {# {{ form.email(readonly=True) }} #}
+            {{ horizontal_field(form.username) }}
+
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-2">
+                    <input type="submit" value="提交" class="btn btn-sm btn-primary" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

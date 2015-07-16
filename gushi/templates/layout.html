@@ -46,14 +46,17 @@
                  {% if current_user.is_authenticated() %}
                     <li class="dropdown">
                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                         <img class="img-rounded profile-thumnnail" src="{{ current_user.gravatar(20) }}"><i class="fa fa-angle-down"></i>
+                         <img class="img-rounded profile-thumnnail" src="{{ current_user.gravatar(20) }}"><i class="fa fa-angle-double-down"></i>
                        </a>
                        <ul class="dropdown-menu">
                         {% if current_user.is_administrator() %}
                           <li><a href="{{ url_for('admin.audit') }}"><i class="fa fa-pencil">审核</i></a></li>
                         {% else %}
-                        <li><a href="{{ url_for('user.create_story') }}"><i class="fa fa-pencil">写故事</i></a></li>
+                          <li><a href="{{ url_for('user.create_story') }}"><i class="fa fa-pencil">写故事</i></a></li>
                           <li><a href="{{ url_for('user.mine') }}"><i class="fa fa-home">我的</i></a></li>
+                          <li><a href="{{ url_for('user.setting', user_id=current_user.id) }}"><i class="fa fa-user">个人设置</i></a></li>
+                          <li><a href="{{ url_for('user.change_password', user_id=current_user.id) }}"><i class="fa fa-user">改密码</i></a></li>
+
                         {% endif %}
                         <li><a href="{{ url_for('auth.signout') }}"><i class="fa fa-sign-out"></i>登出</a></li>
                        </ul>

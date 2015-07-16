@@ -34,14 +34,14 @@
     {% endif %}
 {% endmacro %}
 
-{% macro horizontal_field(field, length=6, label=True, rows="1") %}
+{% macro horizontal_field(field, length=6, label=True, rows="1", readonly=False) %}
     <div class="form-group">
         {% if label %}
             {{ field.label(class="col-md-2 control-label") }}
         {% endif %}
 
         <div class="col-md-{{ length }}">
-            {{ field(class="form-control", placeholder=field.description, rows=rows, **kwargs) }}
+            {{ field(class="form-control", placeholder=field.description, rows=rows, readonly=readonly, **kwargs) }}
             {{ field_errors(field) }}
         </div>
     </div>
@@ -94,7 +94,7 @@
                             {% endif %}
                         </div>
                         <div class="footer">
-                            <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs btn-info">我要续写</a>
+                            <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs btn-info">我要续写<i class="fa fa-edit"></i></a>
                             <div class="meta">
                                 <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs btn-primary">查看已续写</button>
                                 <script type="text/javascript">
@@ -111,7 +111,7 @@
                                         }
                                     });
                                 </script>
-                                <a href="{{ url_for('user.upvote', story_id=story.id) }}"  class="btn btn-default btn-xs btn-danger">点赞</a>&nbsp;{{ story.upvotes.count() }}
+                                <a href="{{ url_for('user.upvote', story_id=story.id) }}"  class="btn btn-default btn-xs btn-danger">点赞<i class="fa fa-thumbs-up"></i></a>&nbsp;{{ story.upvotes.count() }}
                             </div>
                         </div>
                     </div>
@@ -129,6 +129,8 @@
                                 <a href="{{ url_for('site.reposts', story_id=son_story.id) }}" class="btn btn-success btn-xs" title="{{ son_story.content }}"><img class="img-rounded profile-thumnnail" src="{{ son_story.user.gravatar(40) }}"></a>
                             {% endif %}
                         {% endfor %}
+                    {% else %}
+                        暂无
                     {% endif %}
                 </div>
             </div>

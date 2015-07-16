@@ -19,7 +19,7 @@ def index():
 
 @bp.route('/hot')
 def hot():
-    stories = Story.query.all()
+    stories = Story.query.limit(4).all()
     ids_stories = {}
     for story in stories:
         ids_stories[story.id] = story

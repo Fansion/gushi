@@ -4,7 +4,7 @@ from flask import render_template, Blueprint, redirect, url_for, flash, request,
 from flask.ext.login import login_required, current_user
 
 from ..models import db, User, Story, Upvote
-from ..forms import StoryForm, RepostStoryForm
+from ..forms import StoryForm, RepostStoryForm, UserForm, PasswordForm
 
 bp = Blueprint('user', __name__)
 
@@ -106,7 +106,6 @@ def redirect_url(default='site.index'):
 def upvote(story_id):
     upvote = Upvote.query.filter(Upvote.user_id == current_user.id).filter(
         Upvote.story_id == story_id).first()
-    print upvote
     if not upvote:
         upvote = Upvote(user_id=current_user.id, story_id=story_id)
         db.session.add(upvote)
@@ -115,3 +114,31 @@ def upvote(story_id):
         return redirect(redirect_url())
     flash('已赞过')
     return redirect(redirect_url())
+
+
+@bp.route('/setting/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def setting(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    form = UserForm(obj=user)
+    if form.validate_on_submit():
+        user.email = form.email.data.strip()
+        user.username = form.username.data.strip()
+        db.session.add(user)
+        db.session.commit()
+        flash('个人信息修改成功')
+        redirect(url_for('user.setting', user_id=user.id))
+    return render_template('user/setting.html', form=form, user=user)
+
+
+@bp.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = PasswordForm()
+    if form.validate_on_submit():
+        current_user.password = form.new.data.strip()
+        db.session.add(current_user)
+        db.session.commit()
+        flash('密码修改成功')
+        redirect(url_for('user.change_password'))
+    return render_template('user/change_password.html', form=form)

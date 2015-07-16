@@ -71,9 +71,11 @@ class User(UserMixin, db.Model):
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
 
+    # 为了修改密码
     @property
     def password(self):
-        raise AttributeError('密码不可读')
+        # raise AttributeError('密码不可读')
+        pass
 
     @password.setter
     def password(self, password):
