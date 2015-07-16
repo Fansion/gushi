@@ -36,3 +36,19 @@ def edit(story_id):
         db.session.commit()
         return redirect(url_for('admin.audit'))
     return render_template('auth/edit.html', story=story, form=form)
+
+
+@bp.route('/delete/<int:story_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete(story_id):
+    story = Story.query.get_or_404(story_id)
+    if story:
+        for upvote in story.upvotes:
+            db.session.delete(upvote)
+        db.session.delete(story)
+        db.session.commit()
+        flash('成功删除故事')
+    else:
+        flash('无故事可删除')
+    return redirect(url_for('admin.audit'))

@@ -5,6 +5,12 @@
 {% block page_id %}page-audit{% endblock %}
 
 {% block body %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
     {% if stories.count() %}
         <table class="table table-bordered">
             <tr>
@@ -13,12 +19,13 @@
                 <td>创建人</td>
                 <td>创建时间</td>
                 <td></td>
+                <td>请确认</td>
             </tr>
             {% for story in stories %}
                 <tr>
                     <td>{{ story.title }}</td>
                     <td>{{ story.content | markdown | safe }}</td>
-                    <td>{{ story.user.username }}</td>
+                    <td><a href="{{ url_for('site.user_stories', user_id=story.user.id) }}" target="_blank">{{ story.user.username | ismyself | normalize }}</a></td>
                     <td>{{ moment(story.created).fromNow(refresh=True) }}</td>
                     <td>
                          <form method="get" action="{{ url_for('admin.edit', story_id=story.id) }}">
@@ -26,9 +33,22 @@
                             <input class="btn btn-default" type="submit" name="edit" value="修改">
                          </form>
                     </td>
+                    <td>
+                        <form method="post" action="{{ url_for('admin.delete', story_id=story.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <input class="btn btn-danger" id="delete" type="submit" name="delete" value="删除">
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
+        <script type="text/javascript">
+            $("#delete").click(function () {
+                if(!confirm("确认要删除么？")) {
+                    return false;
+                }
+            })
+        </script>
     {% else %}
         <h5 class="table">暂无</h5>
     {% endif %}
