@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.wtf import Form
+from flask.ext.wtf import Form, RecaptchaField
 from wtforms import StringField, SubmitField, TextField, PasswordField, SelectField, TextAreaField, BooleanField, ValidationError
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
@@ -34,6 +34,7 @@ class SigninForm(Form):
     email = StringField(
         '邮箱*', description='使用已注册过的邮箱', validators=[DataRequired('邮箱不能为空'), Length(1, 64), Email('邮箱格式不正确')])
     password = PasswordField('密码*', validators=[DataRequired('密码不能为空')])
+    recaptcha = RecaptchaField()
     remember_me = BooleanField('记住我')
     submit = SubmitField('登陆')
 
