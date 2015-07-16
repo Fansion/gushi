@@ -90,27 +90,29 @@
                             {% if complete_content %}
                                 <p>{{ story.content | markdown | safe }}</p>
                             {% else %}
-                                <p class="abstract"><a href="{{ url_for('site.reposts', story_id=story.id) }}">{{ story.content | truncate(35, true) | markdown | safe }}</a></p>
+                                <p class="abstract"><a href="{{ url_for('site.reposts', story_id=story.id) }}" title="点击查看全文">{{ story.content | truncate(112, true) | markdown | safe }}</a></p>
                             {% endif %}
                         </div>
                         <div class="footer">
                             <a href="{{ url_for('user.create_repost', story_id=story.id) }}" class="btn btn-default btn-xs btn-info">我要续写</a>
-                            <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs btn-primary">已续写</button>
-                            <script type="text/javascript">
-                                $('#btn-convert-{{ story.id }}').click(function () {
-                                    if($("#btn-convert-{{ story.id }}").text() == "已续写") {
-                                        $("#son_stories_writers-{{ story.id }}").css("display", "block");
-                                        $("#btn-convert-{{ story.id }}").text("折叠");
-                                        return;
-                                    }
-                                    if($("#btn-convert-{{ story.id }}").text() == "折叠") {
-                                        $("#son_stories_writers-{{ story.id }}").css("display", "none");
-                                        $("#btn-convert-{{ story.id }}").text("已续写");
-                                        return;
-                                    }
-                                });
-                            </script>
-                            <a href="{{ url_for('user.upvote', story_id=story.id) }}"  class="btn btn-default btn-xs btn-danger">点赞</a>&nbsp;{{ story.upvotes.count() }}
+                            <div class="meta">
+                                <button id="btn-convert-{{ story.id }}" class="btn btn-default btn-xs btn-primary">查看已续写</button>
+                                <script type="text/javascript">
+                                    $('#btn-convert-{{ story.id }}').click(function () {
+                                        if($("#btn-convert-{{ story.id }}").text() == "查看已续写") {
+                                            $("#son_stories_writers-{{ story.id }}").css("display", "block");
+                                            $("#btn-convert-{{ story.id }}").text("折叠");
+                                            return;
+                                        }
+                                        if($("#btn-convert-{{ story.id }}").text() == "折叠") {
+                                            $("#son_stories_writers-{{ story.id }}").css("display", "none");
+                                            $("#btn-convert-{{ story.id }}").text("查看已续写");
+                                            return;
+                                        }
+                                    });
+                                </script>
+                                <a href="{{ url_for('user.upvote', story_id=story.id) }}"  class="btn btn-default btn-xs btn-danger">点赞</a>&nbsp;{{ story.upvotes.count() }}
+                            </div>
                         </div>
                     </div>
                 </div>

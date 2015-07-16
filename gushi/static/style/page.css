@@ -113,6 +113,9 @@ button, {
 .content {
   font-size: 20px;
 }
+.meta {
+  float: right;
+}
 #page-index .hot,
 #page-index .new,
 #page-mine .my,

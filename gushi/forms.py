@@ -10,7 +10,7 @@ from models import User
 class RegisterForm(Form):
 
     email = StringField(
-        '邮箱*', description='未注册过的邮箱', validators=[DataRequired('邮箱不能为空'), Length(1, 64), Email('邮箱格式不正确')])
+        '邮箱*', description='未被注册过的邮箱', validators=[DataRequired('邮箱不能为空'), Length(1, 64), Email('邮箱格式不正确')])
     username = TextField(
         '昵称*', description='未被使用过的昵称', validators=[DataRequired('昵称不能为空'), Length(1, 64)])
     password = PasswordField('密码*', validators=[
